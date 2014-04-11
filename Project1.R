@@ -5,3 +5,5 @@
 ## and some information about the project
 
 #### jasmines addition test
+
+## Tim's additional test to get rid of the R Project files in the Git
