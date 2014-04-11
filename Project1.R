@@ -8,4 +8,4 @@
 
 ## Tim's additional test to get rid of the R Project files in the Git
 
-## It doesn't seem to work -- Tim
+## It doesn't seem to work -- Tim 
