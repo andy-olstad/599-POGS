@@ -1,11 +1,28 @@
 ## Project 1 Code
-## This is a test push to GitHub
 
-## This is where our code will go
-## and some information about the project
+## Question: How different are the household incomes (mean/median/etc) for 
+## households that own/rent/etc in California
 
-#### jasmines addition test
+## Start with 1 year data, we move to 3 yr / 5 yr 
+## Data used will be AMS 2012 1 Year California .csv
 
-## Tim's additional test to get rid of the R Project files in the Git
+## Andy's Code Below
 
-## It doesn't seem to work -- Tim 
+
+
+
+
+
+## Jasmine's Code Below
+
+
+
+
+
+## Sarah's Code Below
+
+
+
+
+
+# Tim's Code Below
