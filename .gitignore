@@ -6,3 +6,7 @@
 
 # R data files from past sessions
 .Rdata
+.Rproj.user
+
+# Do not commit R Projects
+*.Rproj
