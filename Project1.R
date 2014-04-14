@@ -71,9 +71,28 @@ rm(hca,hca_df,pca)
 
 
 ## Sarah's Code Below
+setwd("~/Dropbox/Work/Classes/Spring 2014/Big data")
+library(dplyr)
 
+#variables: TEN, tenure of home; HINCP, household income in past 12 months
 
+cal_households2012 <- read.csv("ss12hca.csv", header = T, stringsAsFactors = FALSE)
+cal_households2012_df <- tbl_df(cal_households2012)
+tenure_by_income2012_df <- select(cal_households2012_df, TEN, HINCP)
+head(tenure_by_income2012_df)
 
+#1 - Owned with mortgage or loan (include home equity loans)
+#2 - Owned free and clear
+#3 - Rented
+#4 - Occupied without payment of rent 
+
+tenure_by_income2012_mean <- summarise(group_by(tenure_by_income2012_df, TEN), mean(HINCP, na.rm = TRUE))
+tenure_by_income2012_median <- summarise(group_by(tenure_by_income2012_df, TEN), median(HINCP, na.rm = TRUE))
+
+tenure_by_income2012_mean
+tenure_by_income2012_median
+
+rm(cal_households2012, cal_households2012_df, tenure_by_income2012, tenure_by_income2012_df, tenure_by_income2012_mean, tenure_by_income2012_median)
 
 
 # Tim's Code Below
