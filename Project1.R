@@ -8,6 +8,57 @@
 
 ## Andy's Code Below
 
+#attach dplyr
+library(dplyr)
+
+#read in the tables
+hca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12hca.csv")
+pca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12pca.csv")
+
+#poking around
+head(hca)
+dim(hca)
+
+#make it dplyr-able
+hca_df<- tbl_df(hca)
+
+#poking around again
+dim(hca_df)
+names(hca_df)
+
+#find the average income for all respondents
+summarise(hca_df, avg_income = mean(HINCP, na.rm = TRUE))
+#  avg_income
+#1   83191.91
+
+#find average income for subsets
+
+#TEN==1 hold mortgages
+#filter(hca_df, TEN == 1)
+summarise(filter(hca_df, TEN == 1), avg_income_mortgagees = mean(HINCP, na.rm = TRUE))
+#  avg_income_mortgagees
+#1   114452.3
+
+#TEN==2 own outright
+summarise(filter(hca_df, TEN == 2), avg_income_clear_owners = mean(HINCP, na.rm = TRUE))
+#   avg_income_clear_owners
+#1                75645.99
+
+
+#TEN==3 rent
+summarise(filter(hca_df, TEN == 3), avg_income_renters = mean(HINCP, na.rm = TRUE))
+# avg_income_renters
+#1           53588.75
+
+#TEN==4 occupy without rent
+summarise(filter(hca_df, TEN == 4), avg_income_squatters = mean(HINCP, na.rm = TRUE))
+# avg_income_squatters
+#1             45386.33
+
+
+
+#cleanup
+rm(hca,hca_df,pca)
 
 
 
