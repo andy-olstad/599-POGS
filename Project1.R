@@ -64,7 +64,32 @@ rm(hca,hca_df,pca)
 
 
 
+
+
 ## Jasmine's Code Below
+# don't forget to check the working directory!
+#read california csv file only look at first 10 rows
+or_sm <- read.csv("ss12hca.csv", nrows = 10,
+                  stringsAsFactors = FALSE)
+str(or_sm)
+
+# subset only the columns that we need
+library(dplyr)
+income_own <- select(or_sm, TEN, HINCP)
+
+# 'tbl_df allows for a cleaner display of the data
+income_owndf <- tbl_df(income_own)
+head(income_owndf)
+
+#find the mean income for each ownership group
+#groub by TEN or house ownership group
+income_ten <- group_by(income_owndf, TEN)
+#finding the mean for each group 
+summarize(income_ten, avg_income = mean(HINCP, na.rm= TRUE))
+summarize(income_ten, med_income = median(HINCP, na.rm= TRUE))
+
+# what kind of summaries do we need to find
+
 
 
 
@@ -95,12 +120,23 @@ tenure_by_income2012_median
 rm(cal_households2012, cal_households2012_df, tenure_by_income2012, tenure_by_income2012_df, tenure_by_income2012_mean, tenure_by_income2012_median)
 
 
+
+
+
+
+
 # Tim's Code Below
 library(dplyr)
 ??dplyr
+
+# Reading in the data, putting it into dplyr table, and selecting the variables of interest
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/csv_hca")
-hca2012 <- read.csv("ss12hca.csv", header=T, nrows=1000, stringsAsFactors = FALSE)
+hca2012 <- read.csv("ss12hca.csv", header=T, stringsAsFactors = FALSE)
 hca2012_df <- tbl_df(hca2012)
+
+# Finding out what are the column numbers for our variables of interest
+which(names(hca2012_df) %in% c("TEN", "HINCP"))
+
 hca2012_df <- select(hca2012_df, TEN, HINCP)
 hca2012_df
 
@@ -110,7 +146,17 @@ hca2012_df
 #3 .Rented
 #4 .Occupied without payment of rent
 
+# Coding the TEN variable to specifications above
+TEN_codes <- c("1" = "Owned with Mortgage or Loan",
+               "2" = "Owned Free and Clear",
+               "3" = "Rented",
+               "4" = "Occupied without Payment of Rent")
+hca2012_df <- mutate(hca2012_df, Housing_Payment = TEN_codes[as.character(TEN)])
+
+# Removing the missing data from the TEN variable
 hca2012_rm.na <- filter(hca2012_df, TEN != "NA") 
+
+# Grouping by the TEN variable and calculating the average household income by group
 acs_tenure <- group_by(hca2012_rm.na, TEN)
 summarize(acs_tenure, 
           avg_inc = mean(HINCP, na.rm = TRUE))
