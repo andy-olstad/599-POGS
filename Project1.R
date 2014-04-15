@@ -131,7 +131,7 @@ library(dplyr)
 
 # Reading in the data, putting it into dplyr table, and selecting the variables of interest
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/Data")
-hca2012 <- read.csv("ss12hca.csv", header=T, stringsAsFactors = FALSE)
+hca2012 <- read.csv("ss12hca.csv", header=T, nrow=10, stringsAsFactors = FALSE)
 hca2012_df <- tbl_df(hca2012)
 
 # Finding out what are the column numbers for our variables of interest
