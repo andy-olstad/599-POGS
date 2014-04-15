@@ -130,7 +130,15 @@ library(dplyr)
 ??dplyr
 
 # Reading in the data, putting it into dplyr table, and selecting the variables of interest
-setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/Data")
+setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
+
+proj1 <- function(state_name){
+  paste(download.file("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip",
+              destfile = "Data/csv_h",state_name,".zip"))
+
+  state_data <- paste(read.csv(unz("Data/csv_h",state_name,".zip", "ss12h",state_name,".csv"), nrows = 10,
+                  stringsAsFactors = FALSE))
+
 hca2012 <- read.csv("ss12hca.csv", header=T, nrow=10, stringsAsFactors = FALSE)
 hca2012_df <- tbl_df(hca2012)
 
