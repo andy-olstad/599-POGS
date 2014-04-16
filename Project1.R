@@ -302,6 +302,8 @@ ca_3yr_df <- mutate(ca_3yr_df, States = ST_codes[as.character(ST)])
 
 
 ## Sarah's Code Below
+
+################################ 1yr CA only dataset #################################################
 setwd("~/Dropbox/Work/Classes/Spring 2014/Big data")
 library(dplyr)
 
@@ -326,6 +328,28 @@ tenure_by_income2012_median
 rm(cal_households2012, cal_households2012_df, tenure_by_income2012, tenure_by_income2012_df, tenure_by_income2012_mean, tenure_by_income2012_median)
 
 
+################################ 3yr all US dataset #################################################
+
+# set up
+rm(list = ls())
+setwd("~/Dropbox/Work/Classes/Spring 2014/Big data")
+library(dplyr)
+
+# get data
+download.file("http://www2.census.gov/acs2012_3yr/pums/csv_hus.zip", 
+              destfile = "csv_hus.zip")
+unzip("csv_hus.zip", list = TRUE)
+
+# concatenate all US csv files into 1
+system("cat csv_hus/ss12husa.csv csv_hus/ss12husb.csv csv_hus/ss12husc.csv csv_hus/ss12husd.csv > ss12hus.csv")
+
+# import, select cols 
+ushouseholds <- read.csv("ss12hus.csv", header = T, stringsAsFactors = FALSE)
+ushouseholds_df <- tbl_df(ushouseholds)
+tenure_by_income_df <- select(ushouseholds_df, TEN, HINCP, ST, ADJHSG)
+
+# check
+head(tenure_by_income_df)
 
 
 
