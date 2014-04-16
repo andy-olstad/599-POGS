@@ -192,10 +192,10 @@ library(dplyr)
 # Reading in the data, putting it into dplyr table, and selecting the variables of interest
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
 
-dwnld <- function(state_name){
-  download.file(paste("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip", sep=""),
-              paste(destfile = "Data/csv_h",state_name,".zip", sep=""))
-}
+#dwnld <- function(state_name){
+#  download.file(paste("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip", sep=""),
+#              paste(destfile = "Data/csv_h",state_name,".zip", sep=""))
+#}
 
 #states <- c("ak", "al", "ar", "az", "ca", "co", "ct", "dc", "de", "fl", "ga", "hi", "ia", "id", "il", "in",
 #             "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt", "nc", "nd", "ne", "nh", "nj",
