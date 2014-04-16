@@ -67,28 +67,174 @@ rm(hca,hca_df,pca)
 
 
 ## Jasmine's Code Below
+
+# i was not able to merge the 4 csv files so i just kept them all separate
+# i ran the code for only one csv and it worked it took a long time so i 
+# didn't try it for the others
+
 # don't forget to check the working directory!
-#read california csv file only look at first 10 rows
-or_sm <- read.csv("ss12hca.csv", nrows = 10,
-                  stringsAsFactors = FALSE)
-str(or_sm)
+setwd("~/Grad School/ST 599/Project_1_Data/csv")
+
+
+# download US 3 year data file csv
+download.file("http://www2.census.gov/acs2012_3yr/pums/csv_hus.zip", 
+              destfile = "csv_hus.zip")
+# unzip csv file
+unzip("csv_hus.zip", list = TRUE)
+# had to manually unzip file and put into a folder 
+
+
+# had trouble merging all the file together and getting r to read as one master file
+# since none of the states are spilt into two different csv files i will just repeat the steps
+# for each csv file and keep as 4 different dataframes, drawback will have 4 differnt plots
+# later in the code you can see which states belong to what csv file
+
+#read each csv file individually
+# only the last letter will be different a, b, c, and d!
+husa_3yr <- (read.csv("ss12husa.csv", header = T, stringsAsFactors = FALSE))
+husb_3yr <- (read.csv("ss12husb.csv", header = T, stringsAsFactors = FALSE))
+husc_3yr <- (read.csv("ss12husc.csv", header = T, stringsAsFactors = FALSE))
+husd_3yr <- (read.csv("ss12husd.csv", header = T, stringsAsFactors = FALSE))
+
+# load dplyr in order to format the data (make it nice)
+library(dplyr)
 
 # subset only the columns that we need
-library(dplyr)
-income_own <- select(or_sm, TEN, HINCP)
+project1_a <- select(husa_3yr, TEN, HINCP, ST, ADJHSG)
+project1_b <- select(husb_3yr, TEN, HINCP, ST, ADJHSG)
+project1_c <- select(husc_3yr, TEN, HINCP, ST, ADJHSG)
+project1_d <- select(husd_3yr, TEN, HINCP, ST, ADJHSG)
+
 
 # 'tbl_df allows for a cleaner display of the data
-income_owndf <- tbl_df(income_own)
-head(income_owndf)
+project1__a_df <- tbl_df(project1_a)
+project1__b_df <- tbl_df(project1_b)
+project1__c_df <- tbl_df(project1_c)
+project1__d_df <- tbl_df(project1_d)
 
-#find the mean income for each ownership group
-#groub by TEN or house ownership group
-income_ten <- group_by(income_owndf, TEN)
-#finding the mean for each group 
-summarize(income_ten, avg_income = mean(HINCP, na.rm= TRUE))
-summarize(income_ten, med_income = median(HINCP, na.rm= TRUE))
+# Coding the TEN variable to specifications above
+TEN_codes <- c("1" = "Owned with Mortgage or Loan",
+               "2" = "Owned Free and Clear",
+               "3" = "Rented",
+               "4" = "Occupied without Payment of Rent")
+# add a new column with the codes from above to each data frame
+project1_a_df <- mutate(project1__a_df, Housing_Payment = TEN_codes[as.character(TEN)])
+project1_b_df <- mutate(project1__b_df, Housing_Payment = TEN_codes[as.character(TEN)])
+project1_c_df <- mutate(project1__c_df, Housing_Payment = TEN_codes[as.character(TEN)])
+project1_d_df <- mutate(project1__d_df, Housing_Payment = TEN_codes[as.character(TEN)])
 
-# what kind of summaries do we need to find
+# Removing the missing data from the TEN variable
+project1_a_df <- filter(project1_a_df, TEN != "NA")
+project1_b_df <- filter(project1_b_df, TEN != "NA")
+project1_c_df <- filter(project1_c_df, TEN != "NA")
+project1_d_df <- filter(project1_d_df, TEN != "NA")
+
+# Coding the ADJHSG variable to specifications above
+ADJHSG_codes <- c("1053092" = "2010",
+                  "1020890" = "2011",
+                  "1000000" = "2012")
+# add a new column with the codes from above to each data frame
+project1_a_df <- mutate(project1_a_df, Year = ADJHSG_codes[as.character(ADJHSG)])
+project1_b_df <- mutate(project1_b_df, Year = ADJHSG_codes[as.character(ADJHSG)])
+project1_c_df <- mutate(project1_c_df, Year = ADJHSG_codes[as.character(ADJHSG)])
+project1_d_df <- mutate(project1_d_df, Year = ADJHSG_codes[as.character(ADJHSG)])
+
+# Coding the ST variable to specifications above
+# states included in the csv a file
+ST_codesa <- c("1" = "AL",
+               "2" = "AK",
+               "4" = "AZ",
+               "5" = "AR",
+               "6" = "CA",
+               "8" = "CO",
+               "9" = "CT",
+               "11" = "DC" ,
+               "12" = "FL" )
+project1_a_df <- mutate(project1_a_df, States = ST_codesa[as.character(ST)])
+
+# states included in the csv b file
+ST_codesb < - c("16" = "ID" ,
+                "17" = "IL" ,
+                "18" = "IN" ,
+                "19" = "IA" ,
+                "20" = "KS" ,
+                "21" = "KY" ,
+                "22" = "LA" ,
+                "23" = "ME" ,
+                "24" = "MD" ,
+                "25" = "MA" ,
+                "26" = "MI" ,
+                "27" = "MN" ,
+                "28" = "MS" )
+project1_b_df <- mutate(project1_b_df, States = ST_codesb[as.character(ST)])
+
+# states included in the csv c file
+ST_codesc <- c("29" = "MO" ,
+               "30" = "MT" ,
+               "31" = "NE" ,
+               "32" = "NV" ,
+               "33" = "NH" ,
+               "34" = "NJ" ,
+               "35" = "NM" ,
+               "36" = "NY" ,
+               "37" = "NC" ,
+               "38" = "ND" ,
+               "39" = "OH" ,
+               "40" = "OK" ,
+               "41" = "OR" )
+project1_c_df <- mutate(project1_c_df, States = ST_codesc[as.character(ST)])
+
+# states included in the csv d file
+ST_codesd <- c("42" = "PA" ,
+               "44" = "RI" ,
+               "45" = "SC" ,
+               "46" = "SD" ,
+               "47" = "TN" ,
+               "48" = "TX" ,
+               "49" = "UT" ,
+               "50" = "VT" ,
+               "51" = "VA" ,
+               "53" = "WA" ,
+               "54" = "WV" ,
+               "55" = "WI" )
+project1_d_df <- mutate(project1_d_df, States = ST_codesd[as.character(ST)])
+
+# warning missing GA, HI, WY and PR
+
+
+#find the mean income for each ownership group by state
+#groub by state
+income_state_a <- group_by(project1_a_df, States)
+income_state_b <- group_by(project1_b_df, States)
+income_state_c <- group_by(project1_c_df, States)
+income_state_d <- group_by(project1_d_df, States)
+
+#group by Housing_Payment or type of ownership
+income_ten_a <- group_by(income_state_a, Housing_Payment)
+income_ten_b <- group_by(income_state_b, Housing_Payment)
+income_ten_c <- group_by(income_state_c, Housing_Payment)
+income_ten_d <- group_by(income_state_d, Housing_Payment)
+
+
+#finding the mean HH income for each state split by housing payment group
+mean_a <- summarize(income_ten_a, avg_income = mean(HINCP, na.rm= TRUE))
+mean_b <- summarize(income_ten_b, avg_income = mean(HINCP, na.rm= TRUE))
+mean_c <- summarize(income_ten_c, avg_income = mean(HINCP, na.rm= TRUE))
+mean_d <- summarize(income_ten_d, avg_income = mean(HINCP, na.rm= TRUE))
+# can do similar calculation for other summaries such as median if need/want
+
+# to view the mean income summaries
+mean_a
+mean_b
+mean_c
+mean_d
+
+# plot the mean for each state and use color to differentiate the type of housing payment
+library(ggplot2)
+qplot(States, avg_income, data = mean_a, color = Housing_Payment)
+qplot(States, avg_income, data = mean_b, color = Housing_Payment)
+qplot(States, avg_income, data = mean_c, color = Housing_Payment)
+qplot(States, avg_income, data = mean_d, color = Housing_Payment)
 
 ### abreviations 
 # Coding the ADJHSG variable to specifications above
