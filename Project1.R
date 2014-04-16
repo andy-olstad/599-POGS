@@ -133,13 +133,16 @@ library(dplyr)
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
 
 proj1 <- function(state_name){
-  paste(download.file("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip",
-              destfile = "Data/csv_h",state_name,".zip"))
+  download.file(paste("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip", sep=""),
+              paste(destfile = "Data/csv_h",state_name,".zip", sep=""))
 
-  state_data <- paste(read.csv(unz("Data/csv_h",state_name,".zip", "ss12h",state_name,".csv"), nrows = 10,
-                  stringsAsFactors = FALSE))
+  state_data <- read.csv(unz(paste("Data/csv_h",state_name,".zip", sep=""), paste("ss12h",state_name,".csv", sep="")), nrows = 10,
+                  stringsAsFactors = FALSE)
+  invisible(state_data)
+}
+proj1.data <- proj1("ca")
 
-hca2012 <- read.csv("ss12hca.csv", header=T, nrow=10, stringsAsFactors = FALSE)
+hca2012 <- proj1.data
 hca2012_df <- tbl_df(hca2012)
 
 # Finding out what are the column numbers for our variables of interest
