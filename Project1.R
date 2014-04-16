@@ -132,15 +132,27 @@ library(dplyr)
 # Reading in the data, putting it into dplyr table, and selecting the variables of interest
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
 
-proj1 <- function(state_name){
+dwnld <- function(state_name){
   download.file(paste("http://www2.census.gov/acs2012_3yr/pums/csv_h",state_name,".zip", sep=""),
               paste(destfile = "Data/csv_h",state_name,".zip", sep=""))
+}
 
+#states <- c("ak", "al", "ar", "az", "ca", "co", "ct", "dc", "de", "fl", "ga", "hi", "ia", "id", "il", "in",
+#             "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt", "nc", "nd", "ne", "nh", "nj",
+#              "nm", "nv", "ny", "oh", "ok", "or", "pa", "pr", "ri", "sc", "sd", "tn", "tx", "")
+
+us_data <- read.csv(unz("Data/csv_hus.zip", "ss12husa.csv"), nrows = 10,
+                       stringsAsFactors = FALSE)
+tbl_df(us_data)
+
+proj1.income.own <- function(state_name){
   state_data <- read.csv(unz(paste("Data/csv_h",state_name,".zip", sep=""), paste("ss12h",state_name,".csv", sep="")), nrows = 10,
                   stringsAsFactors = FALSE)
   invisible(state_data)
 }
+
 proj1.data <- proj1("ca")
+
 
 hca2012 <- proj1.data
 hca2012_df <- tbl_df(hca2012)
