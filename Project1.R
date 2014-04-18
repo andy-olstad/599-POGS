@@ -463,7 +463,7 @@ ushouseholds_df <- tbl_df(ushouseholds)
 tenure_by_income_df <- select(ushouseholds_df, TEN, HINCP, ST, ADJHSG)
 
 ### OPTION 2
-### only import select cols
+### only import select cols because the dataset is friggin big and there are 4,360,176 rows in it
 # find cols in shell:
 # head -n 1 ss12hus.csv | tr ',' '\n' | nl | grep -w 'TEN\|HINCP\|ST\|ADJHSG' | less -S
 
@@ -477,15 +477,88 @@ tenure_by_income_df <- select(ushouseholds_df, TEN, HINCP, ST, ADJHSG)
 # 40  TEN
 # 54  HINCP
 
-ushouseholds <- read.csv(pipe("cut -f7,8,40,50 ss12hus.csv"), header = T, stringsAsFactors = FALSE)
+ushouseholds <- read.csv(pipe("cut -d, -f7,8,40,54 ss12hus.csv"), header = T, stringsAsFactors = FALSE)
 ushouseholds_df <- tbl_df(ushouseholds)
 
+# test dataset
+# ushouseholds <- read.csv(pipe("cut -d, -f 7,8,40,54 test_ss12hus.csv"), header = T, stringsAsFactors = FALSE)
+# ushouseholds_df <- tbl_df(ushouseholds)
+
 # check
-head(tenure_by_income_df)
+print(ushouseholds_df)
 
-# 
+# use Jasmine's code to recode vars
+ADJHSG_codes <- c("1053092" = "2010",
+                  "1020890" = "2011",
+                  "1000000" = "2012")
+ushouseholds_df <- mutate(ushouseholds_df, Year = ADJHSG_codes[as.character(ADJHSG)])
+
+ST_codes <- c("1" = "AL",
+              "2" = "AK",
+              "4" = "AZ",
+              "5" = "AR",
+              "6" = "CA",
+              "8" = "CO",
+              "9" = "CT",
+              "11" = "DC" ,
+              "12" = "FL" ,
+              "13" = "GA" ,
+              "15" = "HI" ,
+              "16" = "ID" ,
+              "17" = "IL" ,
+              "18" = "IN" ,
+              "19" = "IA" ,
+              "20" = "KS" ,
+              "21" = "KY" ,
+              "22" = "LA" ,
+              "23" = "ME" ,
+              "24" = "MD" ,
+              "25" = "MA" ,
+              "26" = "MI" ,
+              "27" = "MN" ,
+              "28" = "MS" ,
+              "29" = "MO" ,
+              "30" = "MT" ,
+              "31" = "NE" ,
+              "32" = "NV" ,
+              "33" = "NH" ,
+              "34" = "NJ" ,
+              "35" = "NM" ,
+              "36" = "NY" ,
+              "37" = "NC" ,
+              "38" = "ND" ,
+              "39" = "OH" ,
+              "40" = "OK" ,
+              "41" = "OR" ,
+              "42" = "PA" ,
+              "44" = "RI" ,
+              "45" = "SC" ,
+              "46" = "SD" ,
+              "47" = "TN" ,
+              "48" = "TX" ,
+              "49" = "UT" ,
+              "50" = "VT" ,
+              "51" = "VA" ,
+              "53" = "WA" ,
+              "54" = "WV" ,
+              "55" = "WI" ,
+              "56" = "WY" , 
+              "72" = "PR" )
+ushouseholds_df <- mutate(ushouseholds_df, States = ST_codes[as.character(ST)])
+
+TEN_codes <- c('1' = 'Owned with mortgage or loan', 
+               '2' = 'Owned free and clear',  
+               '3' = 'Rented',
+               '4' = 'Occupied without payment of rent')
+ushouseholds_df <- mutate(ushouseholds_df, Tenure = TEN_codes[as.character(TEN)])
+
+# calculate stuff
+
+tenure_by_income_mean <- summarise(group_by(ushouseholds_df, Tenure), mean(HINCP, na.rm = TRUE))
+tenure_by_income_median <- summarise(group_by(ushouseholds_df, Tenure), median(HINCP, na.rm = TRUE))
 
 
+###########################################################
 
 
 
