@@ -11,54 +11,161 @@
 #attach dplyr
 library(dplyr)
 
-#read in the tables
-hca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12hca.csv")
-pca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12pca.csv")
+##read in the tables
+#hca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12hca.csv")
+#pca<-read.csv("c:\\Users\\costco682\\Desktop\\ss12pca.csv")
+#Table 1 for all us
+hus1<-read.csv("c:\\Users\\costco682\\Desktop\\csv_hus\\ss12husa.csv")
+hus2<-read.csv("c:\\Users\\costco682\\Desktop\\csv_hus\\ss12husb.csv")
+#at this point I got the error message referring me to help(memory.size)
+#I tried rm(), but ended up just starting a new session for the second half
+hus3<-read.csv("c:\\Users\\costco682\\Desktop\\csv_hus\\ss12husc.csv")
+hus4<-read.csv("c:\\Users\\costco682\\Desktop\\csv_hus\\ss12husd.csv")
 
 #poking around
-head(hca)
-dim(hca)
+#head(hca)
+#dim(hca)
+head(hus1)
+dim(hus1)
 
 #make it dplyr-able
-hca_df<- tbl_df(hca)
+#hca_df<- tbl_df(hca)
+hus1_df<- tbl_df(hus1)
+hus2_df<- tbl_df(hus2)
+hus3_df<- tbl_df(hus3)
+hus4_df<- tbl_df(hus4)
+
 
 #poking around again
-dim(hca_df)
-names(hca_df)
+#dim(hca_df)
+#names(hca_df)
+dim(hus1_df)
+names(hus1_df)
+summarize(hus1_df, states = n_distinct(ST))
+
+
+#do the "group by" thing
+states1<-group_by(hus1_df,ST)
+states2<-group_by(hus2_df,ST)
+states3<-group_by(hus3_df,ST)
+states4<-group_by(hus4_df,ST)
 
 #find the average income for all respondents
-summarise(hca_df, avg_income = mean(HINCP, na.rm = TRUE))
+#summarise(hca_df, avg_income = mean(HINCP, na.rm = TRUE))
 #  avg_income
 #1   83191.91
+
+#do the same thing for the first section of US data
+summarise(hus1_df, avg_income = mean(HINCP, na.rm = TRUE))
+#  avg_income
+#1   72509.22
+
+#break it down by state
+summarise(states1, avg_income = mean(HINCP, na.rm = TRUE))
+#   ST avg_income
+#1   1   56076.18
+#2   2   76007.64
+#3   4   63560.54
+#4   5   51276.36
+#5   6   82125.22
+#6   8   74853.27
+#7   9   97412.12
+#8  10   74710.82
+#9  11  101091.47
+#10 12   64454.97
+#11 13   63228.79
+#12 15   82340.14
+summarise(states2, avg_income = mean(HINCP, na.rm = TRUE))
+#   ST avg_income
+#1  16   56728.47
+#2  17   72444.31
+#3  18   58677.72
+#4  19   60577.21
+#5  20   62618.53
+#6  21   56417.27
+#7  22   59174.78
+#8  23   57959.39
+#9  24   93764.27
+#10 25   88462.89
+#11 26   60691.67
+#12 27   71428.56
+#13 28   50543.66
+summarise(states3, avg_income = mean(HINCP, na.rm = TRUE))
+#   ST avg_income
+#1  29   58804.67
+#2  30   58107.37
+#3  31   62148.79
+#4  32   66296.61
+#5  33   80342.25
+#6  34   94641.75
+#7  35   58573.59
+#8  36   80179.74
+#9  37   60978.57
+#10 38   67183.51
+#11 39   60709.76
+#12 40   56479.21
+#13 41   64006.85
+summarise(states4, avg_income = mean(HINCP, na.rm = TRUE))
+#   ST avg_income
+#1  42   66201.68
+#2  44   74033.83
+#3  45   57369.91
+#4  46   59272.42
+#5  47   58015.65
+#6  48   69137.27
+#7  49   71210.56
+#8  50   67290.69
+#9  51   83956.90
+#10 53   74646.33
+#11 54   51758.17
+#12 55   64193.90
+#13 56   66405.33
+
 
 #find average income for subsets
 
 #TEN==1 hold mortgages
 #filter(hca_df, TEN == 1)
-summarise(filter(hca_df, TEN == 1), avg_income_mortgagees = mean(HINCP, na.rm = TRUE))
+#summarise(filter(hca_df, TEN == 1), avg_income_mortgagees = mean(HINCP, na.rm = TRUE))
 #  avg_income_mortgagees
 #1   114452.3
 
+
 #TEN==2 own outright
-summarise(filter(hca_df, TEN == 2), avg_income_clear_owners = mean(HINCP, na.rm = TRUE))
+#summarise(filter(hca_df, TEN == 2), avg_income_clear_owners = mean(HINCP, na.rm = TRUE))
 #   avg_income_clear_owners
 #1                75645.99
 
 
 #TEN==3 rent
-summarise(filter(hca_df, TEN == 3), avg_income_renters = mean(HINCP, na.rm = TRUE))
+#summarise(filter(hca_df, TEN == 3), avg_income_renters = mean(HINCP, na.rm = TRUE))
 # avg_income_renters
 #1           53588.75
 
 #TEN==4 occupy without rent
-summarise(filter(hca_df, TEN == 4), avg_income_squatters = mean(HINCP, na.rm = TRUE))
+#summarise(filter(hca_df, TEN == 4), avg_income_squatters = mean(HINCP, na.rm = TRUE))
 # avg_income_squatters
 #1             45386.33
 
+states1TENURE<-group_by(hus1_df,ST,TEN)
+summary1<-summarise(states1TENURE, average_income = mean(HINCP, na.rm=TRUE))
+states2TENURE<-group_by(hus2_df,ST,TEN)
+summary2<-summarise(states2TENURE, average_income = mean(HINCP, na.rm=TRUE))
+states3TENURE<-group_by(hus3_df,ST,TEN)
+summary3<-summarise(states3TENURE, average_income = mean(HINCP, na.rm=TRUE))
+states4TENURE<-group_by(hus4_df,ST,TEN)
+summary4<-summarise(states4TENURE, average_income = mean(HINCP, na.rm=TRUE))
+#I think this gets us what we want, but it's very messy...
 
+combined<-rbind(summary1,summary2,summary3,summary4)
+ten1<-combined[which(combined$TEN==1),3]
+ten2<-combined[which(combined$TEN==2),3]
+ten3<-combined[which(combined$TEN==3),3]
+ten4<-combined[which(combined$TEN==4),3]
+boxplot(ten1, ten2, ten3, ten4, main = "Average Income by TENURE")
 
 #cleanup
-rm(hca,hca_df,pca)
+rm()
 
 
 
