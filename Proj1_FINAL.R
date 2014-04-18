@@ -104,4 +104,3 @@ tail(state_ten)
 # Lets remove that last now
 state_ten <- state_ten[-nrow(state_ten),]
 
-
