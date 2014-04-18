@@ -104,3 +104,10 @@ tail(state_ten)
 # Lets remove that last now
 state_ten <- state_ten[-nrow(state_ten),]
 
+# plot of mean income of all states by housing payment
+library(ggplot2)
+# unpolished
+qplot(State, Average_Income, data = state_ten, color = Housing_Payment)
+qplot(Housing_Payment, Average_Income, data = state_ten, color = State)
+
+#attempt to polish and add aline to connect points
