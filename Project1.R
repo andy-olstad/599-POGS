@@ -201,8 +201,13 @@ setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
 #             "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt", "nc", "nd", "ne", "nh", "nj",
 #              "nm", "nv", "ny", "oh", "ok", "or", "pa", "pr", "ri", "sc", "sd", "tn", "tx", "")
 
-us_data <- read.csv(unz("Data/csv_hus.zip", "ss12husa.csv"), nrows = 10,
+usb_data <- read.csv("Data/csv_hus/ss12husb.csv",
                        stringsAsFactors = FALSE)
+usc_data <- read.csv("Data/csv_hus/ss12husc.csv",
+                     stringsAsFactors = FALSE)
+#colnames(usb_data) <- NULL
+head(usb_data)
+
 tbl_df(us_data)
 
 proj1.income.own <- function(state_name){
@@ -212,6 +217,9 @@ proj1.income.own <- function(state_name){
 }
 
 proj1.data <- proj1("ca")
+
+
+
 
 
 hca2012 <- proj1.data
