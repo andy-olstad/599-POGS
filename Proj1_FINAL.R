@@ -31,3 +31,5 @@ summarize(acs_state_tenure,
           avg_inc = mean(HINCP, na.rm = TRUE)
           med_inc = median(HINCP, na.rm=TRUE)
           n <- n())
+
+
