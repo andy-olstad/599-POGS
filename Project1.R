@@ -350,6 +350,7 @@ ADJHSG_codes <- c("1053092" = "2010",
                   "1000000" = "2012")
 ca_3yr_df <- mutate(ca_3yr_df, Year = ADJHSG_codes[as.character(ADJHSG)])
 
+
 # Coding the ST variable to specifications above
 ST_codes <- c("1" = "AL",
               "2" = "AK",
