@@ -110,4 +110,13 @@ library(ggplot2)
 qplot(State, Average_Income, data = state_ten, color = Housing_Payment)
 qplot(Housing_Payment, Average_Income, data = state_ten, color = State)
 
-#attempt to polish and add aline to connect points
+#attempt to polish and add title
+qplot(State, Average_Income, data = state_ten, color = Housing_Payment) + ggtitle("Mean Household Income based on Housing Ownership by State")
+qplot(Housing_Payment, Average_Income, data = state_ten, color = State) + ggtitle("Mean Household Income based on Housing Ownership by State")
+
+#add line
+# need to add group=Housing_Payment because the previous "group by" function separated all states
+qplot(State, Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
+qplot(Housing_Payment, Average_Income, data = state_ten, color = State, group = State) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
+
+# reorder?
