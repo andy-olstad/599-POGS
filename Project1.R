@@ -408,6 +408,12 @@ ca_3yr_df <- mutate(ca_3yr_df, States = ST_codes[as.character(ST)])
 
 
 
+
+
+
+
+
+
 ## Sarah's Code Below
 
 ################################ 1yr CA only dataset #################################################
@@ -481,6 +487,8 @@ head(tenure_by_income_df)
 
 
 
+
+
 # Tim's Code Below
 library(dplyr)
 ??dplyr
@@ -493,15 +501,12 @@ setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data")
 #              paste(destfile = "Data/csv_h",state_name,".zip", sep=""))
 #}
 
-#states <- c("ak", "al", "ar", "az", "ca", "co", "ct", "dc", "de", "fl", "ga", "hi", "ia", "id", "il", "in",
-#             "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt", "nc", "nd", "ne", "nh", "nj",
-#              "nm", "nv", "ny", "oh", "ok", "or", "pa", "pr", "ri", "sc", "sd", "tn", "tx", "")
 
-usb_data <- read.csv("Data/csv_hus/ss12husb.csv",
-                       stringsAsFactors = FALSE)
-usc_data <- read.csv("Data/csv_hus/ss12husc.csv",
-                     stringsAsFactors = FALSE)
-#colnames(usb_data) <- NULL
+usa_data <- read.csv("Data/csv_hus/ss12husa.csv", stringsAsFactors = FALSE)
+usb_data <- read.csv("Data/csv_hus/ss12husb.csv", stringsAsFactors = FALSE)
+usc_data <- read.csv("Data/csv_hus/ss12husc.csv", stringsAsFactors = FALSE)
+usd_data <- read.csv("Data/csv_hus/ss12husd.csv", stringsAsFactors = FALSE)
+
 head(usb_data)
 
 tbl_df(us_data)
