@@ -343,15 +343,34 @@ unzip("csv_hus.zip", list = TRUE)
 # concatenate all US csv files into 1
 system("cat csv_hus/ss12husa.csv csv_hus/ss12husb.csv csv_hus/ss12husc.csv csv_hus/ss12husd.csv > ss12hus.csv")
 
-# import, select cols 
+### OPTION 1
+### import bulk, select cols 
 ushouseholds <- read.csv("ss12hus.csv", header = T, stringsAsFactors = FALSE)
 ushouseholds_df <- tbl_df(ushouseholds)
 tenure_by_income_df <- select(ushouseholds_df, TEN, HINCP, ST, ADJHSG)
 
+### OPTION 2
+### only import select cols
+# find cols in shell:
+# head -n 1 ss12hus.csv | tr ',' '\n' | nl | grep -w 'TEN\|HINCP\|ST\|ADJHSG' | less -S
+
+# head: in header line, 
+# tr: move each colname to new line, 
+# nl: add line numbers, 
+# grep: search for our terms
+
+# 7  ST
+# 8  ADJHSG
+# 40  TEN
+# 54  HINCP
+
+ushouseholds <- read.csv(pipe("cut -f7,8,40,50 ss12hus.csv"), header = T, stringsAsFactors = FALSE)
+ushouseholds_df <- tbl_df(ushouseholds)
+
 # check
 head(tenure_by_income_df)
 
-
+# 
 
 
 
