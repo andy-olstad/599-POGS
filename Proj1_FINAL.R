@@ -34,7 +34,6 @@ state_ten <- summarise(acs_state_tenure,
                             Median_Income = median(HINCP, na.rm = TRUE),
                             Count = n())
 
-tail(acs_state_tenure)
 # Recoding Tenure Codes and State Codes
 TEN_codes <- c("1" = "Owned with Mortgage or Loan",
                "2" = "Owned Free and Clear",
@@ -98,7 +97,12 @@ ST_codes <- c("01" = "AL",
               "72" = "PR")
 
 state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
-state_ten[1:100,]
 
+tail(state_ten)
+
+# Notice the last row is unusual because when we merged the data sets it added
+# the headers again (3 times)
+# Lets remove that last now
+state_ten <- state_ten[-nrow(state_ten),]
 
 
