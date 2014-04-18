@@ -9,6 +9,7 @@ setwd("~/Grad School/ST 599/Project_1_Data/csv")
 
 ## SARAH LOAD
 setwd("~/Dropbox/Work/Classes/Spring 2014/Big data")
+setwd("~/Dropbox/Work/Classes/Spring 2014/Big data/599-POGS")
 
 ## TIM LOAD
 setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/Project 1/Data")
