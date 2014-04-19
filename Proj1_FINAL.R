@@ -40,11 +40,9 @@ TEN_codes <- c("1" = "Owned with Mortgage or Loan",
                "4" = "Occupied without Payment of Rent")
 <<<<<<< HEAD
 ushouseholds_df <- mutate(ushouseholds_df, Housing_Payment = TEN_codes[as.character(TEN)])
-#####this hung for me -Andy 4-18##########
 
 # Removing the missing data from the TEN variable
 ushouseholds_df <- filter(hca2012_df, TEN != "NA") 
-###!what is hca2012_df?????????###################Andy 4-18#########
 
 # Grouping by the TEN variable and calculating the average household income by group
 acs_state_tenure <- group_by(ushouseholds_df, ST, TEN)
@@ -52,6 +50,7 @@ summarize(acs_state_tenure,
           avg_inc = mean(HINCP, na.rm = TRUE)
           med_inc = median(HINCP, na.rm=TRUE)
           n <- n())
+<<<<<<< HEAD
 ####many errors for me here... is it me or the code? help!#Andy 4-18###
 =======
 state_ten <- mutate(state_ten, Housing_Payment = TEN_codes[as.character(TEN)])
@@ -113,6 +112,9 @@ ST_codes <- c("01" = "AL",
 
 state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
 >>>>>>> parent of 385feca... Andy set local direcctory
+=======
+
+>>>>>>> parent of f34754f... andy comments on code troubles in r.final
 
 tail(state_ten)
 
