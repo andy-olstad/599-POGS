@@ -2,7 +2,7 @@
 library(dplyr)
 
 ## ANDY LOAD
-setwd("C:/Users/costco682/Documents/GitHub/599-POGS")
+## SET YOUR WORKING DIRECTORY MANUALLY
 
 ## JASMINE LOAD
 setwd("~/Grad School/ST 599/Project_1_Data/csv")
@@ -17,14 +17,23 @@ setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/Project 
 
 
 ## BEGIN DATA ANALYSIS
-ushouseholds <- read.csv("cut_ss12hus.csv", header = T)
+ushouseholds <- read.csv("cut_ss12hus.csv", header = T, stringsAsFactors=FALSE)
+
+# We have to first make a data matrix in order to get things into numeric form (mainly for HINCP)
+ushouseholds <- data.matrix(ushouseholds)
+
+# Then we revert back into a data frame and then into the nice tbl_df for of dplyr
+ushouseholds <- data.frame(ushouseholds)
 ushouseholds_df <- tbl_df(ushouseholds)
 
-# We need to code HINCP as a numeric
-ushouseholds_df$HINCP <- with(ushouseholds_df, as.numeric(HINCP))
+# Now we should make ST, TEN and ADJHSG back as factor variables
+ushouseholds_df$ST <- with(ushouseholds_df, as.factor(ST))
+ushouseholds_df$TEN <- with(ushouseholds_df, as.factor(TEN))
+ushouseholds_df$ADJHSG <- with(ushouseholds_df, as.factor(ADJHSG))
+str(ushouseholds_df)
 
-# Removing the missing data from the TEN variable
-ushouseholds_df <- filter(ushouseholds_df, TEN != "") 
+# Removing the missing data from the TEN variable (Note: the data.matrix() argument made missing values as NA)
+ushouseholds_df <- filter(ushouseholds_df, TEN != "NA") 
 
 # Grouping by the ST, TEN variable and calculating the average household income by group
 acs_state_tenure <- group_by(ushouseholds_df, ST, TEN)
@@ -41,14 +50,14 @@ TEN_codes <- c("1" = "Owned with Mortgage or Loan",
 state_ten <- mutate(state_ten, Housing_Payment = TEN_codes[as.character(TEN)])
 
 
-# Coding the ST variable to specifications above
-ST_codes <- c("01" = "AL",
-              "02" = "AK",
-              "04" = "AZ",
-              "05" = "AR",
-              "06" = "CA",
-              "08" = "CO",
-              "09" = "CT",
+# Coding the ST variable to specifications above (Note: Jasmine's original coding is ok now since 01 became 1)
+ST_codes <- c("1" = "AL",
+              "2" = "AK",
+              "4" = "AZ",
+              "5" = "AR",
+              "6" = "CA",
+              "8" = "CO",
+              "9" = "CT",
               "10" = "DE",
               "11" = "DC" ,
               "12" = "FL" ,
@@ -97,56 +106,8 @@ ST_codes <- c("01" = "AL",
 
 state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
 
-tail(state_ten)
+state_ten
 
-# Notice the last row is unusual because when we merged the data sets it added
-# the headers again (3 times)
-# Lets remove that last now
-state_ten <- state_ten[-nrow(state_ten),]
 
-# plot of mean income of all states by housing payment
-library(ggplot2)
-# unpolished
-qplot(State, Average_Income, data = state_ten, color = Housing_Payment)
-qplot(Housing_Payment, Average_Income, data = state_ten, color = State)
-
-#attempt to polish and add title
-qplot(State, Average_Income, data = state_ten, color = Housing_Payment) + ggtitle("Mean Household Income based on Housing Ownership by State")
-qplot(Housing_Payment, Average_Income, data = state_ten, color = State) + ggtitle("Mean Household Income based on Housing Ownership by State")
-
-#add line
-# need to add group=Housing_Payment because the previous "group by" function separated all states
-qplot(State, Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
-qplot(Housing_Payment, Average_Income, data = state_ten, color = State, group = State) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
-
-# reorder?
-qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
-# ordered by overall state average income
-# would like to see how things behave when you force order only one line (ie top)
-
-##plotting on a map:
-library(maps)
-data(stateMapEnv)
-data(state.fips)
-
-#map('state',col=rainbow(6),fill=TRUE) #note this colors Michigan unevenly...
-
-#list of colors
-colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
-#for debugging easier to use colors<-c("red","yellow","green","blue")
-state_ten_1<-filter(state_ten,TEN ==1)
-state_ten_1$colorBuckets <- as.numeric(cut(state_ten_1$Average_Income, c(10000, 11672, 12440, 14049, 20000)))
- leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
-
-#assign colors to states
-st.fips <- state.fips$fips[match(map("state", plot=FALSE)$names,
-    state.fips$polyname)]
-st.abb <- state.fips$abb[match(map("state", plot=FALSE)$names,
-    state.fips$polyname)]
-colorsmatched <- state_ten_1$colorBuckets [match(st.abb, state_ten_1$State)]
-
-map("state", col = colors[colorsmatched], fill = TRUE)
-title("Mean Income for TEN == 1")
-  legend("bottomleft", leg.txt, fill = colors)
 
 
