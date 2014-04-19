@@ -2,7 +2,7 @@
 library(dplyr)
 
 ## ANDY LOAD
-## SET YOUR WORKING DIRECTORY MANUALLY
+setwd("C:/Users/costco682/Documents/GitHub/599-POGS")
 
 ## JASMINE LOAD
 setwd("~/Grad School/ST 599/Project_1_Data/csv")
@@ -123,3 +123,28 @@ qplot(Housing_Payment, Average_Income, data = state_ten, color = State, group = 
 qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
 # ordered by overall state average income
 # would like to see how things behave when you force order only one line (ie top)
+
+##plotting on a map:
+library(maps)
+data(stateMapEnv)
+data(state.fips)
+
+#map('state',col=rainbow(6),fill=TRUE) #note this colors Michigan unevenly...
+
+#list of colors
+colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
+#for debugging easier to use colors<-c("red","yellow","green","blue")
+state_ten_1<-filter(state_ten,TEN ==1)
+state_ten_1$colorBuckets <- as.numeric(cut(state_ten_1$Average_Income, c(10000, 11672, 12440, 14049, 20000)))
+ leg.txt <- c("first quartile", "second quartile", "third quartile", "fourth quartile")
+
+#assign colors to states
+st.fips <- state.fips$fips[match(map("state", plot=FALSE)$names,
+    state.fips$polyname)]
+st.abb <- state.fips$abb[match(map("state", plot=FALSE)$names,
+    state.fips$polyname)]
+colorsmatched <- state_ten_1$colorBuckets [match(st.abb, state_ten_1$State)]
+
+map("state", col = colors[colorsmatched], fill = TRUE)
+
+
