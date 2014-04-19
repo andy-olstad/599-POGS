@@ -120,3 +120,6 @@ qplot(State, Average_Income, data = state_ten, color = Housing_Payment, group = 
 qplot(Housing_Payment, Average_Income, data = state_ten, color = State, group = State) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
 
 # reorder?
+qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) +geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State")
+# ordered by overall state average income
+# would like to see how things behave when you force order only one line (ie top)
