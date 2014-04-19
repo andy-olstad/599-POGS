@@ -15,7 +15,6 @@ setwd("C:/Documents and Settings/Tim Skalland/Desktop/ST 599 - Big Data/Project 
 
 
 
-
 ## BEGIN DATA ANALYSIS
 ushouseholds <- read.csv("cut_ss12hus.csv", header = T, stringsAsFactors=FALSE)
 
@@ -25,6 +24,7 @@ ushouseholds <- data.matrix(ushouseholds)
 # Then we revert back into a data frame and then into the nice tbl_df for of dplyr
 ushouseholds <- data.frame(ushouseholds)
 ushouseholds_df <- tbl_df(ushouseholds)
+rm(ushouseholds)
 
 # Now we should make ST, TEN and ADJHSG back as factor variables
 ushouseholds_df$ST <- with(ushouseholds_df, as.factor(ST))
@@ -34,6 +34,7 @@ str(ushouseholds_df)
 
 # Removing the missing data from the TEN variable (Note: the data.matrix() argument made missing values as NA)
 ushouseholds_df <- filter(ushouseholds_df, TEN != "NA") 
+max(ushouseholds_df$HINCP)
 
 # Grouping by the ST, TEN variable and calculating the average household income by group
 acs_state_tenure <- group_by(ushouseholds_df, ST, TEN)
@@ -43,10 +44,10 @@ state_ten <- summarise(acs_state_tenure,
                             Count = n())
 
 # Recoding Tenure Codes and State Codes
-TEN_codes <- c("1" = "Owned with Mortgage or Loan",
-               "2" = "Owned Free and Clear",
+TEN_codes <- c("1" = "Mortgage or Loan",
+               "2" = "Free and Clear",
                "3" = "Rented",
-               "4" = "Occupied without Payment of Rent")
+               "4" = "NoPayment of Rent")
 state_ten <- mutate(state_ten, Housing_Payment = TEN_codes[as.character(TEN)])
 
 
@@ -108,6 +109,9 @@ state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
 
 state_ten
 
-
-
+# A Possible graphic to include, although I can't seem to get the State Abrev. on the X-axis
+library(ggplot2)
+Housing_Ownership <- with(state_ten, as.character(Housing_Payment))
+state_ten$ST <- with(state_ten, as.numeric(ST))
+qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
 
