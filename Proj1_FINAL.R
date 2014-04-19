@@ -136,7 +136,7 @@ colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
 #for debugging easier to use colors<-c("red","yellow","green","blue")
 state_ten_1<-filter(state_ten,TEN ==1)
 state_ten_1$colorBuckets <- as.numeric(cut(state_ten_1$Average_Income, c(10000, 11672, 12440, 14049, 20000)))
- leg.txt <- c("first quartile", "second quartile", "third quartile", "fourth quartile")
+ leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
 
 #assign colors to states
 st.fips <- state.fips$fips[match(map("state", plot=FALSE)$names,
@@ -146,5 +146,7 @@ st.abb <- state.fips$abb[match(map("state", plot=FALSE)$names,
 colorsmatched <- state_ten_1$colorBuckets [match(st.abb, state_ten_1$State)]
 
 map("state", col = colors[colorsmatched], fill = TRUE)
+title("Mean Income for TEN == 1")
+  legend("bottomleft", leg.txt, fill = colors)
 
 
