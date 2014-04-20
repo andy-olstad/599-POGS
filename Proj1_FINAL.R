@@ -1,6 +1,8 @@
 ## Loading the data from each of our computers
 library(dplyr)
 
+## DATA SET USED IS IN THE REPO: "cut_ss12hus.csv"
+
 ## ANDY LOAD
 setwd("C:/Users/costco682/Documents/GitHub/599-POGS")
 
@@ -33,15 +35,15 @@ ushouseholds_df$ADJHSG <- with(ushouseholds_df, as.factor(ADJHSG))
 str(ushouseholds_df)
 
 # Removing the missing data from the TEN variable (Note: the data.matrix() argument made missing values as NA)
-ushouseholds_df <- filter(ushouseholds_df, TEN != "NA") 
+ushouseholds_df <- filter(ushouseholds_df, TEN != "NA")
 max(ushouseholds_df$HINCP)
 
 # Grouping by the ST, TEN variable and calculating the average household income by group
 acs_state_tenure <- group_by(ushouseholds_df, ST, TEN)
-state_ten <- summarise(acs_state_tenure, 
-                            Average_Income = mean(HINCP, na.rm = TRUE),
-                            Median_Income = median(HINCP, na.rm = TRUE),
-                            Count = n())
+state_ten <- summarise(acs_state_tenure,
+                       Average_Income = mean(HINCP, na.rm = TRUE),
+                       Median_Income = median(HINCP, na.rm = TRUE),
+                       Count = n())
 
 # Recoding Tenure Codes and State Codes
 TEN_codes <- c("1" = "Mortgage or Loan",
@@ -102,37 +104,28 @@ ST_codes <- c("1" = "AL",
               "53" = "WA" ,
               "54" = "WV" ,
               "55" = "WI" ,
-              "56" = "WY" , 
+              "56" = "WY" ,
               "72" = "PR")
 
 state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
 
-state_ten[1:100,]
-state_ten[101:200,]
-state_ten[201:204,]
-
+state_ten
 TEN1 <- filter(state_ten, TEN==1)
 TEN2 <- filter(state_ten, TEN==2)
 TEN3 <- filter(state_ten, TEN==3)
 TEN4 <- filter(state_ten, TEN==4)
-
 arrange(TEN1, desc(Average_Income))
 arrange(TEN2, desc(Average_Income))
 arrange(TEN3, desc(Average_Income))
 arrange(TEN4, desc(Average_Income))
 
-
-
-# A Possible graphic to include, although I can't seem to get the State Abrev. on the X-axis
+# A good graphic to include 
 library(ggplot2)
-Housing_Ownership <- with(state_ten, as.character(Housing_Payment))
-state_ten$ST <- with(state_ten, as.numeric(ST))
-qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
-
 # ordered by overall state average income
-qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() + 
+qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() +
   ggtitle("Mean Household Income based on Housing Ownership by State") +
   xlab("State") + ylab("Average income")
+
 
 ##plotting on a map:
 library(maps)
@@ -158,34 +151,35 @@ state_ten_3$colorBuckets <- as.numeric(cut(state_ten_3$Average_Income, quantile(
 
 state_ten_4<-filter(state_ten,TEN ==4)
 state_ten_4$colorBuckets <- as.numeric(cut(state_ten_4$Average_Income, quantile(state_ten_4[,3],c(0,.25,.5,.75,1))-1))
- leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
+leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
 
 
 #assign colors to states
 st.fips <- state.fips$fips[match(map("state", plot=FALSE)$names,
-    state.fips$polyname)]
+                                 state.fips$polyname)]
 st.abb <- state.fips$abb[match(map("state", plot=FALSE)$names,
-    state.fips$polyname)]
+                               state.fips$polyname)]
 colorsmatched1 <- state_ten_1$colorBuckets [match(st.abb, state_ten_1$State)]
 colorsmatched2 <- state_ten_2$colorBuckets [match(st.abb, state_ten_2$State)]
 colorsmatched3 <- state_ten_3$colorBuckets [match(st.abb, state_ten_3$State)]
 colorsmatched4 <- state_ten_4$colorBuckets [match(st.abb, state_ten_4$State)]
 
+
 map("state", col = colors[colorsmatched1], fill = TRUE)
 title("Mean Income for Mortgage or Loan")
-legend("bottomleft", leg.txt, fill = colors, cex=0.54)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched2], fill = TRUE)
-title("Mean Income for Free and Clear")
-legend("bottomleft", leg.txt, fill = colors, cex=0.54)
+title("Mean Income for Owned Free and Clear")
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched3], fill = TRUE)
 title("Mean Income for Rented")
-legend("bottomleft", leg.txt, fill = colors, cex=0.54)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched4], fill = TRUE)
 title("Mean Income for No Payment of Rent")
-legend("bottomleft", leg.txt, fill = colors, cex=0.54)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 ##Now trying a grayscale with more detail:
 
@@ -194,21 +188,21 @@ legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 #started wiht gray because it had the 100 named colors
 grayvector<-rep(NA,100)
 for (i in 1:100){
-grayvector[i]<-paste("gray",i,sep="")
+  grayvector[i]<-paste("gray",i,sep="")
 }
 #but blue is prettier than gray!
-#will use rgb() to get a range of blues.  any rgb color availalbe by changing those 3 numbers
+#will use rgb() to get a range of blues. any rgb color availalbe by changing those 3 numbers
 library(grDevices) #to get for rgb()
 bluevector<-rep(NA,100)
 for (i in 1:100){
-bluevector[i]<-rgb(red=0,green=0,blue=1,alpha=.008*i+.2)
+  bluevector[i]<-rgb(red=0,green=0,blue=1,alpha=.008*i+.2)
 }
 
 #evenly spaced buckets (not quartile-spaced buckets
 graycuts1<-rep(NA,100)
 range<-max(state_ten_1$Average_Income)-min(state_ten_1$Average_Income)
 for (i in 1:100){
-graycuts1[i]<-min(state_ten_1$Average_Income)+i*range/100
+  graycuts1[i]<-min(state_ten_1$Average_Income)+i*range/100
 }
 graycuts1[1]<-0
 
@@ -218,13 +212,7 @@ graymatch1<-state_ten_1$grayBuckets [match(st.abb, state_ten_1$State)]
 map("state", col = grayvector[graymatch1], fill = TRUE)
 title("Mean Income for Mortgage or Loan",sub="5 example shades given in legend")
 graylegend.txt<-c(paste(as.integer(graycuts1[2])),paste(as.integer(graycuts1[25])),paste(as.integer(graycuts1[50])),paste(as.integer(graycuts1[75])),paste(as.integer(graycuts1[99])))
-<<<<<<< HEAD
-  legend("bottomright", graylegend.txt, cex=0.62, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
-=======
-  legend("bottomleft", graylegend.txt, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
+legend("bottomleft", graylegend.txt, cex=0.6, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
+
 map("state", col = bluevector[graymatch1], fill = TRUE)
-  legend("bottomleft", graylegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
-
->>>>>>> 2799e2d30a067048b799d8b8abdb541a8ddf01cc
-
-
+legend("bottomleft", graylegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
