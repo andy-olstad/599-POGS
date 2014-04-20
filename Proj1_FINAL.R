@@ -190,11 +190,21 @@ legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 ##Now trying a grayscale with more detail:
 
 #Create the scale:
+###This will get us 100 colors, with color changes evenly spaced along our range
+#started wiht gray because it had the 100 named colors
 grayvector<-rep(NA,100)
 for (i in 1:100){
 grayvector[i]<-paste("gray",i,sep="")
 }
+#but blue is prettier than gray!
+#will use rgb() to get a range of blues.  any rgb color availalbe by changing those 3 numbers
+library(grDevices) #to get for rgb()
+bluevector<-rep(NA,100)
+for (i in 1:100){
+bluevector[i]<-rgb(red=0,green=0,blue=1,alpha=.008*i+.2)
+}
 
+#evenly spaced buckets (not quartile-spaced buckets
 graycuts1<-rep(NA,100)
 range<-max(state_ten_1$Average_Income)-min(state_ten_1$Average_Income)
 for (i in 1:100){
@@ -208,6 +218,13 @@ graymatch1<-state_ten_1$grayBuckets [match(st.abb, state_ten_1$State)]
 map("state", col = grayvector[graymatch1], fill = TRUE)
 title("Mean Income for Mortgage or Loan",sub="5 example shades given in legend")
 graylegend.txt<-c(paste(as.integer(graycuts1[2])),paste(as.integer(graycuts1[25])),paste(as.integer(graycuts1[50])),paste(as.integer(graycuts1[75])),paste(as.integer(graycuts1[99])))
+<<<<<<< HEAD
   legend("bottomright", graylegend.txt, cex=0.62, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
+=======
+  legend("bottomleft", graylegend.txt, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
+map("state", col = bluevector[graymatch1], fill = TRUE)
+  legend("bottomleft", graylegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
+
+>>>>>>> 2799e2d30a067048b799d8b8abdb541a8ddf01cc
 
 
