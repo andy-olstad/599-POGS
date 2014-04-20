@@ -160,19 +160,19 @@ colorsmatched4 <- state_ten_4$colorBuckets [match(st.abb, state_ten_4$State)]
 
 map("state", col = colors[colorsmatched1], fill = TRUE)
 title("Mean Income for TEN == 1")
-  legend("bottomleft", leg.txt, fill = colors)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched2], fill = TRUE)
 title("Mean Income for TEN == 2")
-  legend("bottomleft", leg.txt, fill = colors)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched3], fill = TRUE)
 title("Mean Income for TEN == 3")
-  legend("bottomleft", leg.txt, fill = colors)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched4], fill = TRUE)
 title("Mean Income for TEN == 4")
-  legend("bottomleft", leg.txt, fill = colors)
+legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 ##Now trying a grayscale with more detail:
 
