@@ -107,7 +107,21 @@ ST_codes <- c("1" = "AL",
 
 state_ten <- mutate(state_ten, State = ST_codes[as.character(ST)])
 
-state_ten
+state_ten[1:100,]
+state_ten[101:200,]
+state_ten[201:204,]
+
+TEN1 <- filter(state_ten, TEN==1)
+TEN2 <- filter(state_ten, TEN==2)
+TEN3 <- filter(state_ten, TEN==3)
+TEN4 <- filter(state_ten, TEN==4)
+
+arrange(TEN1, desc(Average_Income))
+arrange(TEN2, desc(Average_Income))
+arrange(TEN3, desc(Average_Income))
+arrange(TEN4, desc(Average_Income))
+
+
 
 # A Possible graphic to include, although I can't seem to get the State Abrev. on the X-axis
 library(ggplot2)
@@ -157,22 +171,21 @@ colorsmatched2 <- state_ten_2$colorBuckets [match(st.abb, state_ten_2$State)]
 colorsmatched3 <- state_ten_3$colorBuckets [match(st.abb, state_ten_3$State)]
 colorsmatched4 <- state_ten_4$colorBuckets [match(st.abb, state_ten_4$State)]
 
-
 map("state", col = colors[colorsmatched1], fill = TRUE)
-title("Mean Income for TEN == 1")
-legend("bottomright", leg.txt, fill = colors, cex=0.59)
+title("Mean Income for Mortgage or Loan")
+legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 
 map("state", col = colors[colorsmatched2], fill = TRUE)
-title("Mean Income for TEN == 2")
-legend("bottomright", leg.txt, fill = colors, cex=0.59)
+title("Mean Income for Free and Clear")
+legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 
 map("state", col = colors[colorsmatched3], fill = TRUE)
-title("Mean Income for TEN == 3")
-legend("bottomright", leg.txt, fill = colors, cex=0.59)
+title("Mean Income for Rented")
+legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 
 map("state", col = colors[colorsmatched4], fill = TRUE)
-title("Mean Income for TEN == 4")
-legend("bottomright", leg.txt, fill = colors, cex=0.59)
+title("Mean Income for No Payment of Rent")
+legend("bottomleft", leg.txt, fill = colors, cex=0.54)
 
 ##Now trying a grayscale with more detail:
 
@@ -193,8 +206,8 @@ state_ten_1$grayBuckets <- as.numeric(cut(state_ten_1$Average_Income, graycuts1)
 graymatch1<-state_ten_1$grayBuckets [match(st.abb, state_ten_1$State)]
 
 map("state", col = grayvector[graymatch1], fill = TRUE)
-title("Mean Income for TEN == 1",sub="5 example shades given in legend")
+title("Mean Income for Mortgage or Loan",sub="5 example shades given in legend")
 graylegend.txt<-c(paste(as.integer(graycuts1[2])),paste(as.integer(graycuts1[25])),paste(as.integer(graycuts1[50])),paste(as.integer(graycuts1[75])),paste(as.integer(graycuts1[99])))
-  legend("bottomleft", graylegend.txt, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
+  legend("bottomright", graylegend.txt, cex=0.62, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
 
 
