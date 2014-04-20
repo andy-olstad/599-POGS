@@ -138,7 +138,7 @@ state_ten_3$colorBuckets <- as.numeric(cut(state_ten_3$Average_Income, quantile(
 
 state_ten_4<-filter(state_ten,TEN ==4)
 state_ten_4$colorBuckets <- as.numeric(cut(state_ten_4$Average_Income, quantile(state_ten_4[,3],c(0,.25,.5,.75,1))-1))
- leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
+ leg.txt <- c("1st quartile", "2nd quartile","3rd quartile", "4th quartile")
 
 
 #assign colors to states
@@ -153,17 +153,17 @@ colorsmatched4 <- state_ten_4$colorBuckets [match(st.abb, state_ten_4$State)]
 
 
 map("state", col = colors[colorsmatched1], fill = TRUE)
-title("Mean Income for TEN == 1")
-  legend("bottomleft", leg.txt, fill = colors)
+title("Mean Income for Mortgage or Loan")
+  legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched2], fill = TRUE)
-title("Mean Income for TEN == 2")
-  legend("bottomleft", leg.txt, fill = colors)
+title("Mean Income for Owned Free and Clear")
+  legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched3], fill = TRUE)
-title("Mean Income for TEN == 3")
-  legend("bottomleft", leg.txt, fill = colors)
+title("Mean Income for Rented")
+  legend("bottomright", leg.txt, fill = colors, cex=0.59)
 
 map("state", col = colors[colorsmatched4], fill = TRUE)
-title("Mean Income for TEN == 4")
-  legend("bottomleft", leg.txt, fill = colors)
+title("Mean Income for No Payment of Rent")
+  legend("bottomright", leg.txt, fill = colors, cex=0.59)
