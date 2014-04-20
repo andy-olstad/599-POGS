@@ -47,7 +47,7 @@ state_ten <- summarise(acs_state_tenure,
 TEN_codes <- c("1" = "Mortgage or Loan",
                "2" = "Free and Clear",
                "3" = "Rented",
-               "4" = "NoPayment of Rent")
+               "4" = "No Payment of Rent")
 state_ten <- mutate(state_ten, Housing_Payment = TEN_codes[as.character(TEN)])
 
 
