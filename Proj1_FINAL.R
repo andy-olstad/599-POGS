@@ -115,6 +115,11 @@ Housing_Ownership <- with(state_ten, as.character(Housing_Payment))
 state_ten$ST <- with(state_ten, as.numeric(ST))
 qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
 
+# ordered by overall state average income
+qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() + 
+  ggtitle("Mean Household Income based on Housing Ownership by State") +
+  xlab("State") + ylab("Average income")
+
 ##plotting on a map:
 library(maps)
 data(stateMapEnv)
@@ -123,8 +128,9 @@ data(state.fips)
 #map('state',col=rainbow(6),fill=TRUE) #note this colors Michigan unevenly...
 
 #list of colors
-colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
+#colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4") # hard to distinguish
 #for debugging easier to use colors<-c("red","yellow","green","blue")
+colors <- c("cadetblue1","darkturquoise","dodgerblue","blue2")
 
 #separately for each of the tenure categories:
 state_ten_1<-filter(state_ten,TEN ==1)
