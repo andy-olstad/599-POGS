@@ -167,3 +167,28 @@ title("Mean Income for TEN == 3")
 map("state", col = colors[colorsmatched4], fill = TRUE)
 title("Mean Income for TEN == 4")
   legend("bottomleft", leg.txt, fill = colors)
+
+##Now trying a grayscale with more detail:
+
+#Create the scale:
+grayvector<-rep(NA,100)
+for (i in 1:100){
+grayvector[i]<-paste("gray",i,sep="")
+}
+
+graycuts1<-rep(NA,100)
+range<-max(state_ten_1$Average_Income)-min(state_ten_1$Average_Income)
+for (i in 1:100){
+graycuts1[i]<-min(state_ten_1$Average_Income)+i*range/100
+}
+graycuts1[1]<-0
+
+state_ten_1$grayBuckets <- as.numeric(cut(state_ten_1$Average_Income, graycuts1))
+graymatch1<-state_ten_1$grayBuckets [match(st.abb, state_ten_1$State)]
+
+map("state", col = grayvector[graymatch1], fill = TRUE)
+title("Mean Income for TEN == 1")
+  legend("bottomleft", leg.txt, fill = grayvector)
+
+
+
