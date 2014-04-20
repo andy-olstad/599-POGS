@@ -193,8 +193,8 @@ state_ten_1$grayBuckets <- as.numeric(cut(state_ten_1$Average_Income, graycuts1)
 graymatch1<-state_ten_1$grayBuckets [match(st.abb, state_ten_1$State)]
 
 map("state", col = grayvector[graymatch1], fill = TRUE)
-title("Mean Income for TEN == 1")
-  legend("bottomleft", leg.txt, fill = grayvector)
-
+title("Mean Income for TEN == 1",sub="5 example shades given in legend")
+graylegend.txt<-c(paste(as.integer(graycuts1[2])),paste(as.integer(graycuts1[25])),paste(as.integer(graycuts1[50])),paste(as.integer(graycuts1[75])),paste(as.integer(graycuts1[99])))
+  legend("bottomleft", graylegend.txt, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
 
 
