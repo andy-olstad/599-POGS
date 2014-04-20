@@ -115,3 +115,55 @@ Housing_Ownership <- with(state_ten, as.character(Housing_Payment))
 state_ten$ST <- with(state_ten, as.numeric(ST))
 qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
 
+##plotting on a map:
+library(maps)
+data(stateMapEnv)
+data(state.fips)
+
+#map('state',col=rainbow(6),fill=TRUE) #note this colors Michigan unevenly...
+
+#list of colors
+colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
+#for debugging easier to use colors<-c("red","yellow","green","blue")
+
+#separately for each of the tenure categories:
+state_ten_1<-filter(state_ten,TEN ==1)
+state_ten_1$colorBuckets <- as.numeric(cut(state_ten_1$Average_Income, quantile(state_ten_1[,3],c(0,.25,.5,.75,1))-1))
+
+state_ten_2<-filter(state_ten,TEN ==2)
+state_ten_2$colorBuckets <- as.numeric(cut(state_ten_2$Average_Income, quantile(state_ten_2[,3],c(0,.25,.5,.75,1))-1))
+
+state_ten_3<-filter(state_ten,TEN ==3)
+state_ten_3$colorBuckets <- as.numeric(cut(state_ten_3$Average_Income, quantile(state_ten_3[,3],c(0,.25,.5,.75,1))-1))
+
+state_ten_4<-filter(state_ten,TEN ==4)
+state_ten_4$colorBuckets <- as.numeric(cut(state_ten_4$Average_Income, quantile(state_ten_4[,3],c(0,.25,.5,.75,1))-1))
+ leg.txt <- c("first quartile", "second quartile","third quartile", "fourth quartile")
+
+
+#assign colors to states
+st.fips <- state.fips$fips[match(map("state", plot=FALSE)$names,
+    state.fips$polyname)]
+st.abb <- state.fips$abb[match(map("state", plot=FALSE)$names,
+    state.fips$polyname)]
+colorsmatched1 <- state_ten_1$colorBuckets [match(st.abb, state_ten_1$State)]
+colorsmatched2 <- state_ten_2$colorBuckets [match(st.abb, state_ten_2$State)]
+colorsmatched3 <- state_ten_3$colorBuckets [match(st.abb, state_ten_3$State)]
+colorsmatched4 <- state_ten_4$colorBuckets [match(st.abb, state_ten_4$State)]
+
+
+map("state", col = colors[colorsmatched1], fill = TRUE)
+title("Mean Income for TEN == 1")
+  legend("bottomleft", leg.txt, fill = colors)
+
+map("state", col = colors[colorsmatched2], fill = TRUE)
+title("Mean Income for TEN == 2")
+  legend("bottomleft", leg.txt, fill = colors)
+
+map("state", col = colors[colorsmatched3], fill = TRUE)
+title("Mean Income for TEN == 3")
+  legend("bottomleft", leg.txt, fill = colors)
+
+map("state", col = colors[colorsmatched4], fill = TRUE)
+title("Mean Income for TEN == 4")
+  legend("bottomleft", leg.txt, fill = colors)
