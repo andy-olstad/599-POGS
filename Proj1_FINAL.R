@@ -123,8 +123,9 @@ data(state.fips)
 #map('state',col=rainbow(6),fill=TRUE) #note this colors Michigan unevenly...
 
 #list of colors
-colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4")
-#for debugging easier to use colors<-c("red","yellow","green","blue")
+# colors<-c("dodgerblue1","dodgerblue2","dodgerblue3","dodgerblue4") # hard to distinguish
+# colors<-c("red","yellow","green","blue") # for debugging
+colors <- c("cadetblue1","darkturquoise","dodgerblue","blue2")
 
 #separately for each of the tenure categories:
 state_ten_1<-filter(state_ten,TEN ==1)
