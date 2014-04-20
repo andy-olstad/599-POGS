@@ -2,7 +2,7 @@
 library(dplyr)
 
 ## ANDY LOAD
-## SET YOUR WORKING DIRECTORY MANUALLY
+setwd("C:/Users/costco682/Documents/GitHub/599-POGS")
 
 ## JASMINE LOAD
 setwd("~/Grad School/ST 599/Project_1_Data/csv")
