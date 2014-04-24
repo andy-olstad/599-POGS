@@ -10,3 +10,4 @@
 
 # Do not commit R Projects
 *.Rproj
+Thumbs.db
