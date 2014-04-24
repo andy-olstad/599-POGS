@@ -116,9 +116,9 @@ state_ten$ST <- with(state_ten, as.numeric(ST))
 qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
 
 # ordered by overall state average income
-qplot(reorder(State, Average_Income, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() + 
-  ggtitle("Mean Household Income based on Housing Ownership by State") +
-  xlab("State") + ylab("Average income")
+qplot(reorder(State, Average_Income, FUN = max, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State") +
+  xlab("State") + ylab("Average income") + 
+  theme(axis.text.x = element_text(angle = -90, hjust = 1))
 
 ##plotting on a map:
 library(maps)
