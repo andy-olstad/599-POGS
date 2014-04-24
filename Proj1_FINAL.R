@@ -47,7 +47,7 @@ state_ten <- summarise(acs_state_tenure,
 TEN_codes <- c("1" = "Mortgage or Loan",
                "2" = "Free and Clear",
                "3" = "Rented",
-               "4" = "NoPayment of Rent")
+               "4" = "No Payment of Rent")
 state_ten <- mutate(state_ten, Housing_Payment = TEN_codes[as.character(TEN)])
 
 
@@ -113,7 +113,7 @@ state_ten
 library(ggplot2)
 Housing_Ownership <- with(state_ten, as.character(Housing_Payment))
 state_ten$ST <- with(state_ten, as.numeric(ST))
-qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment_Type) + geom_line() 
+qplot(ST, Average_Income, data=state_ten, colour=Housing_Payment) + geom_line() 
 
 # ordered by overall state average income
 qplot(reorder(State, Average_Income, FUN = max, order = T), Average_Income, data = state_ten, color = Housing_Payment, group = Housing_Payment) + geom_line() + ggtitle("Mean Household Income based on Housing Ownership by State") +
