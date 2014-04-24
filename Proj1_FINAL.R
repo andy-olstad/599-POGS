@@ -3,6 +3,7 @@ library(dplyr)
 
 ## ANDY LOAD
 setwd("C:/Users/costco682/Documents/GitHub/599-POGS")
+setwd("C:/Users/andy.olstad/Desktop/GitHub/599-POGS/")
 
 ## JASMINE LOAD
 setwd("~/Grad School/ST 599/Project_1_Data/csv")
@@ -203,11 +204,97 @@ state_ten_1$grayBuckets <- as.numeric(cut(state_ten_1$Average_Income, graycuts1)
 graymatch1<-state_ten_1$grayBuckets[match(st.abb, state_ten_1$State)]
 
 map("state", col = grayvector[graymatch1], fill = TRUE)
-title("Mean Income for TEN == 1",sub="5 example shades given in legend")
+title("Mean Income for Mortgage or Loan",sub="5 example shades given in legend")
 graylegend.txt<-c(paste(as.integer(graycuts1[2])),paste(as.integer(graycuts1[25])),paste(as.integer(graycuts1[50])),paste(as.integer(graycuts1[75])),paste(as.integer(graycuts1[99])))
   legend("bottomleft", graylegend.txt, fill = c(grayvector[2],grayvector[25],grayvector[50],grayvector[75],grayvector[99]))
 map("state", col = bluevector[graymatch1], fill = TRUE)
-  legend("bottomleft", graylegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
+title("Mean Income for Mortgage or Loan",sub="5 example shades given in legend")
+  legend("bottomleft", graylegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+
+#repeat with ten==2
+graycuts2<-rep(NA,100)
+range<-max(state_ten_2$Average_Income)-min(state_ten_2$Average_Income)
+for (i in 1:100){
+graycuts2[i]<-min(state_ten_2$Average_Income)+i*range/100
+}
+graycuts2[1]<-0
+
+state_ten_2$grayBuckets <- as.numeric(cut(state_ten_2$Average_Income, graycuts2))
+graymatch2<-state_ten_2$grayBuckets[match(st.abb, state_ten_2$State)]
+
+map("state", col = bluevector[graymatch2], fill = TRUE)
+title("Mean Income for Owned Free and Clear",sub="5 example shades given in legend")
+graylegend2.txt<-c(paste(as.integer(graycuts2[2])),paste(as.integer(graycuts2[25])),paste(as.integer(graycuts2[50])),paste(as.integer(graycuts2[75])),paste(as.integer(graycuts2[99])))
+  legend("bottomleft", graylegend2.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+
+#repeat with ten==3
+graycuts3<-rep(NA,100)
+range<-max(state_ten_3$Average_Income)-min(state_ten_3$Average_Income)
+for (i in 1:100){
+graycuts3[i]<-min(state_ten_3$Average_Income)+i*range/100
+}
+graycuts3[1]<-0
+
+state_ten_3$grayBuckets <- as.numeric(cut(state_ten_3$Average_Income, graycuts3))
+graymatch3<-state_ten_3$grayBuckets[match(st.abb, state_ten_3$State)]
+
+map("state", col = bluevector[graymatch3], fill = TRUE)
+title("Mean Income for Rented",sub="5 example shades given in legend")
+graylegend3.txt<-c(paste(as.integer(graycuts3[2])),paste(as.integer(graycuts3[25])),paste(as.integer(graycuts3[50])),paste(as.integer(graycuts3[75])),paste(as.integer(graycuts3[99])))
+  legend("bottomleft", graylegend3.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+
+#repeat with ten==4
+graycuts4<-rep(NA,100)
+range<-max(state_ten_4$Average_Income)-min(state_ten_4$Average_Income)
+for (i in 1:100){
+graycuts4[i]<-min(state_ten_4$Average_Income)+i*range/100
+}
+graycuts4[1]<-0
+
+state_ten_4$grayBuckets <- as.numeric(cut(state_ten_4$Average_Income, graycuts4))
+graymatch4<-state_ten_4$grayBuckets[match(st.abb, state_ten_4$State)]
+
+map("state", col = bluevector[graymatch4], fill = TRUE)
+title("Mean Income for Occupied without Rent",sub="5 example shades given in legend")
+graylegend4.txt<-c(paste(as.integer(graycuts4[2])),paste(as.integer(graycuts4[25])),paste(as.integer(graycuts4[50])),paste(as.integer(graycuts4[75])),paste(as.integer(graycuts4[99])))
+  legend("bottomleft", graylegend4.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+
+
+
+#four maps for the price of one:
+graycuts5<-rep(NA,100)
+range<-max(state_ten$Average_Income)-min(state_ten$Average_Income)
+for (i in 1:100){
+graycuts5[i]<-min(state_ten$Average_Income)+i*range/100
+}
+graycuts5[1]<-0
+
+state_ten_1$sharedBuckets <- as.numeric(cut(state_ten_1$Average_Income, graycuts5))
+sharedmatch1<-state_ten_1$sharedBuckets[match(st.abb, state_ten_1$State)]
+state_ten_2$sharedBuckets <- as.numeric(cut(state_ten_2$Average_Income, graycuts5))
+sharedmatch2<-state_ten_2$sharedBuckets[match(st.abb, state_ten_2$State)]
+state_ten_3$sharedBuckets <- as.numeric(cut(state_ten_3$Average_Income, graycuts5))
+sharedmatch3<-state_ten_3$sharedBuckets[match(st.abb, state_ten_3$State)]
+state_ten_4$sharedBuckets <- as.numeric(cut(state_ten_4$Average_Income, graycuts5))
+sharedmatch4<-state_ten_4$sharedBuckets[match(st.abb, state_ten_4$State)]
+
+
+par(mfrow=c(2,2))
+graylegend5.txt<-c(paste(as.integer(graycuts5[2])),paste(as.integer(graycuts5[25])),paste(as.integer(graycuts5[50])),paste(as.integer(graycuts5[75])),paste(as.integer(graycuts5[99])))
+map("state", col = bluevector[sharedmatch1], fill = TRUE)
+title("Mean Income for Mortgage or Loan")
+  legend("bottomleft", graylegend5.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+map("state", col = bluevector[sharedmatch2], fill = TRUE)
+title("Mean Income for Owned Free & Clear")
+  legend("bottomleft", graylegend5.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+map("state", col = bluevector[sharedmatch3], fill = TRUE)
+title("Mean Income for Rented")
+  legend("bottomleft", graylegend5.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+map("state", col = bluevector[sharedmatch4], fill = TRUE)
+title("Mean Income for Occupied without Rent")
+  legend("bottomleft", graylegend5.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
+
+
 
 #make a state map that shows ratio of owners' to renters' income
 own.rent.ratio<-rep(NA,51)
