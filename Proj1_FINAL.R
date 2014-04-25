@@ -294,9 +294,9 @@ map("state", col = bluevector[sharedmatch4], fill = TRUE)
 title("Mean Income for Occupied without Rent")
   legend("bottomleft", graylegend5.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]),title="unadjusted dollars")
 
+par(mfrow=c(1,1))
 
-
-#make a state map that shows ratio of owners' to renters' income
+#make a state map that shows ratio of owners (w/mortgage)' to renters' income
 own.rent.ratio<-rep(NA,51)
 for(i in 1:51){
 owni<-4*i-3
@@ -306,8 +306,14 @@ rent<-state_ten[renti,3]
 own.rent.ratio[i]<-rent/own
 }
 own.rent.ratio
+#own.rent.ratio is a vector giving the rent/mortgage ratio for each state.
+
 
 #evenly spaced buckets (not quartile-spaced buckets
+ratiostates<-filter(state_ten,TEN==1)
+for(i in 1:51){
+ratiostates$ratio[i]<-own.rent.ratio[i]
+}
 ratiocuts<-rep(NA,100)
 range<-max(own.rent.ratio)-min(own.rent.ratio)
 for (i in 1:100){
@@ -315,22 +321,44 @@ ratiocuts[i]<-min(ratiostates$ratio)+i*range/100
 }
 ratiocuts[1]<-ratiocuts[1]-.01
 
-
-for (i in 1:100){
-own.rent.ratio[i]<-min(own.rent.ratio)+i*range/100
-}
-own.rent.ratio[1]<-own.rent.ratio[1]-.001
-
-ratiostates<-filter(state_ten,TEN==1)
-for(i in 1:51){
-ratiostates$ratio[i]<-own.rent.ratio[i]
-}
-
 ratiostates$ratioBuckets <- as.numeric(cut(ratiostates$ratio, ratiocuts))
 ratiomatch<-ratiostates$ratioBuckets[match(st.abb, ratiostates$State)]
 
 map("state", col = bluevector[ratiomatch], fill = TRUE)
-title("Income Ratio for Renters vs. Owners",sub="5 example shades given in legend")
+title("Income Ratio for Renters vs. Mortgage or Loan",sub="5 example shades given in legend")
 ratiolegend.txt<-c(paste(100*round(ratiocuts[2],3),"%"),paste(100*round(ratiocuts[25],3),"%"),paste(100*round(ratiocuts[50],3),"%"),paste(100*round(ratiocuts[75],3),"%"),paste(100*round(ratiocuts[99],3),"%"))
   legend("bottomleft", legend=ratiolegend.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
 
+
+#repeat for ratio non-renters vs. mortgage
+#make a state map that shows ratio of mortgaged owners' to occupiers' income
+own.occupy.ratio<-rep(NA,51)
+for(i in 1:51){
+owni<-4*i-3
+occupyi<-4*i
+own<-state_ten[owni,3]
+occupy<-state_ten[occupyi,3]
+own.occupy.ratio[i]<-occupy/own
+}
+own.occupy.ratio
+#evenly spaced buckets (not quartile-spaced buckets
+
+for(i in 1:51){
+ratiostates$ratio2[i]<-own.occupy.ratio[i]
+}
+
+ratiocuts2<-rep(NA,100)
+range<-max(own.occupy.ratio)-min(own.occupy.ratio)
+for (i in 1:100){
+ratiocuts2[i]<-min(ratiostates$ratio2)+i*range/100
+}
+ratiocuts2[1]<-ratiocuts2[1]-.01
+
+
+ratiostates$ratioBuckets2 <- as.numeric(cut(ratiostates$ratio2, ratiocuts2))
+ratiomatch2<-ratiostates$ratioBuckets2[match(st.abb, ratiostates$State)]
+
+map("state", col = bluevector[ratiomatch2], fill = TRUE)
+title("Income Ratio for Occupy without Rent vs. Mortgage or Loan",sub="5 example shades given in legend")
+ratiolegend2.txt<-c(paste(100*round(ratiocuts2[2],3),"%"),paste(100*round(ratiocuts2[25],3),"%"),paste(100*round(ratiocuts2[50],3),"%"),paste(100*round(ratiocuts2[75],3),"%"),paste(100*round(ratiocuts2[99],3),"%"))
+  legend("bottomleft", legend=ratiolegend2.txt, fill = c(bluevector[2],bluevector[25],bluevector[50],bluevector[75],bluevector[99]))
